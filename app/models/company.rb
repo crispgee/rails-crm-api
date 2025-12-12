@@ -7,7 +7,6 @@ class Company < ApplicationRecord
   validates :name, presence: true
   validates :industry, presence: true
   validates :registration_number, presence: true, uniqueness: true
-  validates :status, presence: true
   
   def balance 
     payments.sum(:amount).to_f - withdrawals.sum(:amount).to_f
