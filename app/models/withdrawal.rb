@@ -2,8 +2,23 @@ class Withdrawal < ApplicationRecord
   belongs_to :customer
   belongs_to :company
   
-  validates :currency, presence: true
-  validates :status, inclusion: {in: %w[pending completed failed]}
+  validates :amount, numericality: {greater_than: 0}, presence: true
+ # validates :status, inclusion: {in: %w[pending completed failed]}
   validates :customer, :company, presence: true
-  
+  validate :sufficient_balance
+  validate :customer_company
+
+  private
+  def sufficient_balance
+    return unless company && customer
+    if amount > company.balance_for(customer)
+      errors.add(:amount, "cannot be greater than your balance in this company")
+    end 
+  end 
+
+   def customer_company
+    unless Membership.exists?(customer_id: customer.id, company_id: company.id)
+      errors.add(:base, "customer does not belong to this company")
+    end 
+  end 
 end

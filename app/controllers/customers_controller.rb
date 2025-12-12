@@ -1,20 +1,11 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :update , :destroy , :balance]
+  before_action :set_customer, only: [:show, :update , :destroy , :add_company, :pay, :withdraw]
   def index
     render json: Customer.all
   end 
 
   def show 
-    total_balance = @customer.balance
-
-    render json: {
-            customer: {
-                 id: @customer.id,
-                 name: @customer.first_name,
-                 email: @customer.email
-            },
-            Balance: total_balance
-  }
+    render json: @customer, serializer: CustomerSerializer
   end 
 
   def create
@@ -39,8 +30,36 @@ class CustomersController < ApplicationController
     head :no_content
   end 
 
-  def balance
-    render json: {balance: @customer.balance}
+  def add_company
+    company = Company.find(params[:company_id])
+    @customer.companies << company unless @customer.companies.include?(company)
+    render json: @customer, serializer: CustomerSerializer, status: :ok
+  end 
+
+  def pay 
+    company = Company.find(params[:company_id])
+    amount = params[:amount]
+    PaymentCreator.create(
+      company: company,
+      customer: @customer,
+      amount: amount
+    )
+    render json: @customer, serializer: CustomerSerializer, status: :created
+  rescue ActiveRecord::RecordNotFound
+    render json: {error: "No record found"}, status: :not_found
+  end 
+
+  def withdraw
+    company = Company.find(params[:company_id])
+    amount = params[:amount]
+    WithdrawalCreator.create(
+      company: company,
+      customer: @customer,
+      amount: amount
+    )
+    render json: @customer, serializer: CustomerSerializer, status: :created
+  rescue ActiveRecord::RecordNotFound
+    render json: {error: "No record found"}, status: :not_found
   end 
 
   private

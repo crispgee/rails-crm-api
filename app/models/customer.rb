@@ -11,4 +11,8 @@ class Customer < ApplicationRecord
  def balance
     payments.sum(:amount).to_f - withdrawals.sum(:amount).to_f
  end 
+
+ def balance_for(company)
+   company.payments.where(customer_id: id).sum(:amount).to_f - company.withdrawals.where(customer_id: id).sum(:amount).to_f
+ end 
 end

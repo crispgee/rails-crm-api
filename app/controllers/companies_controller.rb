@@ -6,7 +6,7 @@ class CompaniesController < ApplicationController
   end 
 
   def show 
-    render json: @company 
+    render json: @company, serializer: CompanySerializer
   end 
 
   def create 

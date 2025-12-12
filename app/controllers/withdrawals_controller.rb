@@ -20,7 +20,7 @@ class WithdrawalsController < ApplicationController
 
   private
   def withdrawal_params
-    params.require(:withdrawal).permit(:amount, :customer_id, :company_id, :currency)
+    params.require(:withdrawal).permit(:amount, :customer_id, :company_id)
   end 
   def set_withdrawal
     @withdrawal = Withdrawal.find([params[:id]])
