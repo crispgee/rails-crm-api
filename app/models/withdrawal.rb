@@ -3,7 +3,6 @@ class Withdrawal < ApplicationRecord
   belongs_to :company
   
   validates :amount, numericality: {greater_than: 0}, presence: true
- # validates :status, inclusion: {in: %w[pending completed failed]}
   validates :customer, :company, presence: true
   validate :sufficient_balance
   validate :customer_company
@@ -12,7 +11,7 @@ class Withdrawal < ApplicationRecord
   def sufficient_balance
     return unless company && customer
     if amount > company.balance_for(customer)
-      errors.add(:amount, "cannot be greater than your balance in this company")
+      errors.add(:amount, "Insufficient Balance")
     end 
   end 
 

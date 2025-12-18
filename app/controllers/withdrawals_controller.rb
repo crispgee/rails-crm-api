@@ -18,6 +18,16 @@ class WithdrawalsController < ApplicationController
     end 
   end 
 
+  def company_withdrawals
+    company = Company.find(params[:company_id])
+    render json: company.withdrawals
+  end
+
+  def customer_withdrawals
+    customer = Customer.find(params[:customer_id])
+    render json: customer.withdrawals
+  end 
+
   private
   def withdrawal_params
     params.require(:withdrawal).permit(:amount, :customer_id, :company_id)

@@ -46,7 +46,7 @@ class CustomersController < ApplicationController
     )
     render json: @customer, serializer: CustomerSerializer, status: :created
   rescue ActiveRecord::RecordNotFound
-    render json: {error: "No record found"}, status: :not_found
+    render json: {error: "Company does not exist"}, status: :not_found
   end 
 
   def withdraw
@@ -59,7 +59,7 @@ class CustomersController < ApplicationController
     )
     render json: @customer, serializer: CustomerSerializer, status: :created
   rescue ActiveRecord::RecordNotFound
-    render json: {error: "No record found"}, status: :not_found
+    render json: {error: "Company does not exist"}, status: :not_found
   end 
 
   private

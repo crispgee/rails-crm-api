@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   get 'companies/customers/:customer_id', to: 'companies#customer_companies', as: 'customer_companies'
 
   resources :withdrawals, only: [:index, :create, :show]
+  get 'withdrawals/customers/:customer_id', to: 'withdrawals#customer_withdrawals', as: 'customer_withdrawals'
+  get 'withdrawals/companies/:company_id', to: 'withdrawals#company_withdrawals', as: 'company_withdrawals'
+
   resources  :companies do 
     get 'balance', on: :member
   end  
